@@ -41,7 +41,7 @@ export default function Contact() {
             <Navbar />
             <CssBaseline />
             <div className={classes.paper}>
-                <img src={Logo} className={classes.contactimage} />
+                <img src={Logo} className={classes.contactimage} alt="logo" />
             </div>
             {/* Hero unit */}
             <Container maxWidth="sm" component="main" className={classes.heroContent}>

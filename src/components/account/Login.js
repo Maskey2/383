@@ -6,37 +6,38 @@ import Container from '@material-ui/core/Container';
 import Logo from '../../assets/logo.jpg'
 import { createMuiTheme } from '@material-ui/core/styles';
 import { Redirect } from 'react-router';
+import { withStyles } from '@material-ui/core/styles';
 import Nav from '../features/Nav';
 
 
 
-// const styles = withStyles(theme => ({
-//     paper: {
-//         marginTop: theme.spacing(8),
-//         display: 'flex',
-//         flexDirection: 'column',
-//         alignItems: 'center',
-//     },
-//     form: {
-//         width: '100%', // Fix IE 11 issue.
-//         marginTop: theme.spacing(1),
-//     },
-//     logo: {
-//         height: '175px'
-//     },
-//     color: {
-//         background: '#047923',
-//         color: 'white',
-//         '&:hover': {
-//             background: '#ffa500',
-//             color: 'white',
-//         }
-//     },
-//     submit: {
-//         margin: theme.spacing(3, 0, 2),
-//     },
-// }));
-//const classes  = useStyles();
+const styles = theme => ({
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+    },
+    logo: {
+        height: '175px'
+    },
+    color: {
+        background: '#047923',
+        color: 'white',
+        '&:hover': {
+            background: '#ffa500',
+            color: 'white',
+        }
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+});
+
 
 class Login extends React.Component {
 
@@ -47,7 +48,7 @@ class Login extends React.Component {
             username: '',
             password: '',
             islogin: false
-        };
+            };
         this.handleChange = this.handleChange.bind(this);
         this.handlepassword = this.handlepassword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -87,7 +88,7 @@ class Login extends React.Component {
             })
             .then((response) => {
                 this.setState({ islogin: true });
-                console.log(response);
+               // window.location.reload();
                 sessionStorage.setItem('userData', JSON.stringify(response));
             })
             .catch(error => {
@@ -100,6 +101,7 @@ class Login extends React.Component {
     render() {
         const theme = createMuiTheme();
         const { username, password } = this.state;
+        const {classes}  =this.props;
         if (this.state.islogin) {
             return <Redirect to="/farmfield" />
         }
@@ -108,21 +110,15 @@ class Login extends React.Component {
                 <Nav />
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
-                    <div className="container" style={{
-                        marginTop: theme.spacing(8),
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}>
+                    <div 
+                        className = {classes.paper}>
 
-                        <img src={Logo} className="container1" style={{
-                            height: '175px'
-                        }} alt="Logo" />
+                        <img src={Logo} 
+                        className={classes.logo} 
+                         alt="Logo" />
 
-                        <form className=" container2" style={{
-                            width: '100%',
-                            marginTop: theme.spacing(1),
-                        }}
+                        <form 
+                            className = {classes.form}
                             onSubmit={this.handleSubmit}
                         >
                             <TextField
@@ -153,19 +149,10 @@ class Login extends React.Component {
                                 className="button"
                                 type="submit"
                                 value="Submit"
-                                style={{
-                                    margin: theme.spacing(3, 0, 2),
-                                    background: '#047923',
-                                    color: 'white',
-                                    textAlign: "center",
-                                    '&:hover': {
-                                        background: '#ffa500',
-                                        color: 'white'
-                                    }
-                                }}
+                                className = {classes.color}
                                 onClick={this.handleClick}
                             >
-                                Register
+                                Login
               </Button>
                         </form>
                     </div>
@@ -177,4 +164,4 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+export default withStyles(styles)(Login);

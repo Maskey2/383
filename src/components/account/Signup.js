@@ -7,35 +7,36 @@ import Logo from '../../assets/logo.jpg'
 import { createMuiTheme } from '@material-ui/core/styles';
 import { Redirect } from 'react-router';
 import Nav from '../features/Nav';
+import { withStyles } from '@material-ui/core/styles';
 
 
 
-// const styles = withStyles(theme => ({
-//     paper: {
-//         marginTop: theme.spacing(8),
-//         display: 'flex',
-//         flexDirection: 'column',
-//         alignItems: 'center',
-//     },
-//     form: {
-//         width: '100%', // Fix IE 11 issue.
-//         marginTop: theme.spacing(1),
-//     },
-//     logo: {
-//         height: '175px'
-//     },
-//     color: {
-//         background: '#047923',
-//         color: 'white',
-//         '&:hover': {
-//             background: '#ffa500',
-//             color: 'white',
-//         }
-//     },
-//     submit: {
-//         margin: theme.spacing(3, 0, 2),
-//     },
-// }));
+const styles = theme => ({
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+    },
+    logo: {
+        height: '175px'
+    },
+    color: {
+        background: '#047923',
+        color: 'white',
+        '&:hover': {
+            background: '#ffa500',
+            color: 'white',
+        }
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+});
 //const classes  = useStyles();
 
 class Signup extends React.Component {
@@ -46,12 +47,16 @@ class Signup extends React.Component {
         this.state = {
             username: '',
             password: '',
+            email: '',
+            phone: '',
             islogin: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handlepassword = this.handlepassword.bind(this);
+        this.handleEmail = this.handleEmail.bind(this);
+        this.handlePhone = this.handlePhone.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleClick = this.handleClick.bind(this);
+       // this.handleClick = this.handleClick.bind(this);
     }
 
 
@@ -61,45 +66,54 @@ class Signup extends React.Component {
     handlepassword(event) {
         this.setState({ password: event.target.value });
     }
+    handleEmail(event){
+        this.setState({email: event.target.value});
+    }
+    handlePhone(event){
+        this.setState({phone: event.target.value});
+    }
     handleSubmit(event) {
         event.preventDefault();
 
     }
 
-    handleClick() {
-        let FormData = {
-            Username: this.state.username,
-            Password: this.state.password
-        }
-        //  console.log(FormData);
-        fetch("https://localhost:44346/api/authentication/login", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(FormData)
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                else {
-                    throw new Error('invalid login');
-                }
-            })
-            .then((response) => {
-                this.setState({ islogin: true });
-                console.log(response);
-                sessionStorage.setItem('userData', JSON.stringify(response));
-            })
-            .catch(error => {
-                console.error("error:", error)
-                alert(error);
-            });
+    // handleClick() {
+    //     let FormData = {
+    //         Username: this.state.username,
+    //         Password: this.state.password,
+    //         Email: this.state.email,
+    //         Phone: this.state.phone
+    //     }
+    //     //  console.log(FormData);
+    //     fetch("https://localhost:44346/api/authentication/login", {
+    //         method: 'POST',
+    //         headers: { 'Content-Type': 'application/json' },
+    //         body: JSON.stringify(FormData)
+    //     })
+    //         .then((response) => {
+    //             if (response.ok) {
+    //                 return response.json();
+    //             }
+    //             else {
+    //                 throw new Error('invalid login');
+    //             }
+    //         })
+    //         .then((response) => {
+    //             this.setState({ islogin: true });
+    //             console.log(response);
+    //             sessionStorage.setItem('userData', JSON.stringify(response));
+    //         })
+    //         .catch(error => {
+    //             console.error("error:", error)
+    //             alert(error);
+    //         });
 
 
-    }
+    // }
     render() {
         const theme = createMuiTheme();
-        const { username, password } = this.state;
+        const {classes}  =this.props;
+        const { username, password, email, phone } = this.state;
         if (this.state.islogin) {
             return <Redirect to="/farmfield" />
         }
@@ -108,25 +122,19 @@ class Signup extends React.Component {
                 <Nav />
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
-                    <div className="container" style={{
-                        marginTop: theme.spacing(8),
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}>
+                    <div className="container"
+                    className = {classes.paper} >
 
-                        <img src={Logo} className="container1" style={{
-                            height: '175px'
-                        }} alt="Logo" />
+                        <img src={Logo} className="container1"
+                        className = {classes.logo}
+                         alt="Logo" />
 
-                        <form className=" container2" style={{
-                            width: '100%',
-                            marginTop: theme.spacing(1),
-                        }}
+                        <form className=" container2"
+                        className = {classes.form}
                             onSubmit={this.handleSubmit}
                         >
                             <TextField
-                                name="Email"
+                                name="username"
                                 margin="normal"
                                 required
                                 fullWidth
@@ -137,7 +145,31 @@ class Signup extends React.Component {
                                 autoFocus
                                 onChange={this.handleChange}
                             />
-                            <TextField
+                             <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                name="email"
+                                label="Email"
+                                type="email"
+                                id="email"
+                                autoComplete="current-email"
+                                value={email}
+                                onChange={this.handleEmail}
+                            />
+                             <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                name="phone"
+                                label="Phone"
+                                type="phone"
+                                id="phone"
+                                autoComplete="current-phone"
+                                value={phone}
+                                onChange={this.handlePhone}
+                            />
+                             <TextField
                                 margin="normal"
                                 required
                                 fullWidth
@@ -149,32 +181,12 @@ class Signup extends React.Component {
                                 value={password}
                                 onChange={this.handlepassword}
                             />
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                name="password"
-                                label="Confirm Password"
-                                type="password"
-                                id="password"
-                                autoComplete="current-password"
-                                value={password}
-                                onChange={this.handlepassword}
-                            />
+
                             <Button
                                 className="button"
                                 type="submit"
                                 value="Submit"
-                                style={{
-                                    margin: theme.spacing(3, 0, 2),
-                                    background: '#047923',
-                                    color: 'white',
-                                    textAlign: "center",
-                                    '&:hover': {
-                                        background: '#ffa500',
-                                        color: 'white'
-                                    }
-                                }}
+                                className = {classes.color}
                                 onClick={this.handleClick} >
                                 Register
                          </Button>
@@ -186,4 +198,4 @@ class Signup extends React.Component {
     }
 }
 
-export default Signup;
+export default withStyles(styles)(Signup);
