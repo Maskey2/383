@@ -1,17 +1,14 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useState } from 'react';
 import Nav from './Nav';
 import Footer from './Footer'
 import { Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import { connect } from 'react-redux'
-import { getNumbers } from '../../actions/getAction';
-import { addBasket } from '../../actions/addAction'
-
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -23,21 +20,30 @@ const useStyles = makeStyles(theme => ({
     title: {
         flexGrow: 1,
     },
+    total: {
+        fontFamily: 'Poppins',
+        fontSize: '30px',
+        margin: '20px'
+    },
     heroContent: {
         padding: theme.spacing(8, 0, 6),
     },
-    products: {
-        justifyContent: 'space-around',
-        color: 'green',
-        fontSize: '20px',
-        borderBottom: '2px solid grey',
-        padding: '20px',
+    section: {
         display: 'flex',
-        flexWrap: 'wrap'
-
+        justifyContent: 'space-around',
+        borderBottom: '2px solid grey',
+    },
+    icon: {
+        backgroundColor: '#e4e4e4',
+        borderRadius: '20px',
+        padding: '10px',
+        fontSize: '40px',
+        verticalAlign: 'middle',
+        margin: '5px',
+        cursor: 'pointer'
     }
-}));
 
+}));
 
 function Checkout({ basketProps }) {
     const classes = useStyles();
@@ -55,13 +61,22 @@ function Checkout({ basketProps }) {
     })
 
     productsInCart = productsInCart.map((product, index) => {
+        //let count = useState(product.numbers);
+        //const [count, setCount] = useState(product.numbers);
         return (
-            <Fragment>
-                <h2>{product.name}</h2>
-                <h2>${product.price}</h2>
-                <h2>{product.numbers}</h2>
-                <h2>Total: ${product.numbers * product.price}</h2>
-            </Fragment>
+            <div className={classes.section}>
+                <div className={classes.subsection}><h2 >{product.name}</h2></div>
+                <div className={classes.subsection}><h2 >${product.price}</h2></div>
+                <div className={classes.subsection}><h2><ArrowLeftIcon className={classes.icon} /> {product.size} <ArrowRightIcon className={classes.icon} /></h2></div>
+                <div className={classes.subsection}><h2>
+                    <RemoveIcon className={classes.icon}
+                    //onClick={() => setCount(count - 1)} 
+                    /> {product.numbers} <AddIcon className={classes.icon}
+                    // onClick={() => setCount(count + 1)} 
+                    /></h2>
+                </div>
+                <div className={classes.subsection}><h2 >Total: ${product.numbers * product.price}</h2></div><br />
+            </div>
         )
     });
     return (
@@ -75,32 +90,26 @@ function Checkout({ basketProps }) {
                     Print out or Scan your Ticket
                       </Typography>
             </Container>
-
             <Container>
                 <div className={classes.root}>
-                    <Toolbar style={{ backgroundColor: '#047923', color: 'white' }}>
+                    <Toolbar style={{ backgroundColor: '#047923', color: 'white', margin: '20px' }}>
                         <Typography variant="h6" className={classes.title}>
-                            Product
-                             </Typography>
+                            Product </Typography>
                         <Typography variant="h6" className={classes.title}>
-                            Price
-                             </Typography>
+                            Price  </Typography>
                         <Typography variant="h6" className={classes.title}>
-                            Quantity
-                             </Typography>
+                            Bucket Size </Typography>
                         <Typography variant="h6" className={classes.title}>
-                            Total
-                        </Typography>
+                            Quantity </Typography>
+                        <Typography variant="h6" className={classes.title}>
+                            Total </Typography>
                     </Toolbar>
                 </div>
-
-                <div className={classes.products}>{productsInCart}</div>
-
-                <Typography variant="h6" className={classes.title}>Basket Total: {basketProps.cartCost}.00
+                <div>{productsInCart}</div>
+                <Typography className={classes.total}>Basket Total: ${basketProps.cartCost}.00
                 </Typography>
             </Container>
             <Footer />
-
         </div>
     )
 }

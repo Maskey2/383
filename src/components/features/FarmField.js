@@ -10,10 +10,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import CardMedia from '@material-ui/core/CardMedia';
 import tiers from './Productinfo'
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import { Button } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { addBasket } from '../../actions/addAction';
@@ -85,10 +81,18 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
+
+
 function Farmfield(props) {
     console.log(props);
     const classes = useStyles();
 
+    const [buttonText, setButtonText] = React.useState("Buy Ticket");
+
+    function handleClick() {
+        console.log('clicked');
+        setButtonText("Go to Cart");
+    }
     return (
         <div>
             <React.Fragment>
@@ -108,7 +112,7 @@ function Farmfield(props) {
                 <Container maxWidth="md" component="main">
                     <Grid container spacing={5} alignItems="flex-end">
                         {tiers.map(tier => (
-                            <Grid item key={tier.title} xs={12} sm={6} md={4}>
+                            <Grid item key={tier.id} xs={12} sm={6} md={4}>
                                 <Card>
                                     <CardHeader
                                         title={tier.title} subheader={tier.subheader} titleTypographyProps={{ align: 'center' }}
@@ -129,19 +133,9 @@ function Farmfield(props) {
                                                 </Typography>
                                             ))}
                                         </ul>
-                                        <FormControl variant="outlined" className={classes.formControl}>
-                                            <InputLabel id="demo-simple-select-outlined-label">Bucket Size</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-outlined-label"
-                                                id="demo-simple-select-outlined" label="Bucket Size" >
-                                                <MenuItem value=""> </MenuItem>
-                                                <MenuItem >Small - ${tier.sprice}</MenuItem>
-                                                <MenuItem >Medium - ${tier.mprice}</MenuItem>
-                                                <MenuItem >Large - ${tier.lprice}</MenuItem>
-                                            </Select>
-                                            <Button onClick={() => props.addBasket(tier.title)} className={classes.createbutton} style={{ marginTop: '5px' }}>{tier.buttonText}</Button>
-                                        </FormControl>
-
+                                        <Typography align="center">
+                                            <Button onClick={() => { props.addBasket(tier.title); handleClick(); }} className={classes.createbutton} style={{ marginTop: '5px' }}>{buttonText}</Button>
+                                        </Typography>
                                     </CardContent>
                                 </Card>
                             </Grid>
