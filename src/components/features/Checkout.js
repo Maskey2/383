@@ -9,6 +9,8 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import QRCode from 'qrcode.react'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -50,7 +52,6 @@ function Checkout({ basketProps }) {
     console.log(basketProps);
 
     let productsInCart = [];
-
     Object.keys(basketProps.products).forEach(function (item) {
         console.log(item);
         console.log(basketProps.products[item].inCart);
@@ -65,6 +66,7 @@ function Checkout({ basketProps }) {
         //const [count, setCount] = useState(product.numbers);
         return (
             <div className={classes.section}>
+                <HighlightOffIcon className={classes.icon} />
                 <div className={classes.subsection}><h2 >{product.name}</h2></div>
                 <div className={classes.subsection}><h2 >${product.price}</h2></div>
                 <div className={classes.subsection}><h2><ArrowLeftIcon className={classes.icon} /> {product.size} <ArrowRightIcon className={classes.icon} /></h2></div>
@@ -76,9 +78,11 @@ function Checkout({ basketProps }) {
                     /></h2>
                 </div>
                 <div className={classes.subsection}><h2 >Total: ${product.numbers * product.price}</h2></div><br />
+                
             </div>
         )
     });
+
     return (
         <div>
             <Nav />
@@ -105,9 +109,12 @@ function Checkout({ basketProps }) {
                             Total </Typography>
                     </Toolbar>
                 </div>
+                
                 <div>{productsInCart}</div>
+
                 <Typography className={classes.total}>Basket Total: ${basketProps.cartCost}.00
                 </Typography>
+
             </Container>
             <Footer />
         </div>

@@ -1,4 +1,4 @@
-import { ADD_PRODUCT_BASKET, GET_NUMBERS_BASKET } from '../actions/types';
+import { ADD_PRODUCT_BASKET, GET_NUMBERS_BASKET, REMOVE_PRODUCT_BASKET } from '../actions/types';
 const initialState = {
     basketNumbers: 0,
     cartCost: 0,
@@ -73,6 +73,19 @@ export default (state = initialState, action) => {
             return {
                 ...state,
 
+            }
+        case REMOVE_PRODUCT_BASKET:
+            let removeQuantity = { ...state.products[action.payload] }
+            removeQuantity.numbers -= 1;
+            removeQuantity.inCart = false;
+            console.log(removeQuantity);
+            return {
+                basketNumbers: state.basketNumbers - 1,
+                cartCost: state.cartCost + state.products[action.payload].price,
+                products: {
+                    ...state.products,
+                    [action.payload]: removeQuantity
+                }
             }
         default:
             return state;
